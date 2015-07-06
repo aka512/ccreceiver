@@ -1,15 +1,29 @@
 <html>
 <head>
-  <title>Example minimum receiver</title>
-  <script src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>
-</head>
-<body>
-  <video id='media'/>
-  <script>
-    window.mediaElement = document.getElementById('media');
-    window.mediaManager = new cast.receiver.MediaManager(window.mediaElement);
-    window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
-    window.castReceiverManager.start();
-  </script>
+	<link rel="stylesheet" type="text/css" href="../css/receiver.css" />
+<body class="initial">
+	<div class="messages">
+		<h1>Waiting for Messages...</h1>
+	</div>
 </body>
+
+<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+<script src="https://www.gstatic.com/cast/js/receiver/1.0/cast_receiver.js"></script>
+<script>
+	$(function() {
+		var receiver = new cast.receiver.Receiver('2D94CBF6', ['aaa']),
+			channelHandler = new cast.receiver.ChannelHandler('aaa'),
+			$messages = $('.messages'),
+			$body = $('body');
+		
+		channelHandler.addChannelFactory(
+			receiver.createChannelFactory('*** YOUR NAMESPACE ***'));
+		receiver.start();
+		channelHandler.addEventListener(cast.receiver.Channel.EventType.MESSAGE, onMessage.bind(this));
+		function onMessage(event) {
+			$messages.html(event.message.type);
+		}
+	});
+</script>
+
 </html>
